@@ -13,7 +13,7 @@ const resolvers = {
 
     Mutation: {
         addUser: async (parent, {username, email, password})=>{
-            const user = await User.create({username, email, password}):
+            const user = await User.create({username, email, password});
             const token = signToken(user);
 
             return {token, user};
@@ -42,6 +42,7 @@ const resolvers = {
                     { new: true }
                 )
             }
+            throw AuthenticationError;
         },
         removeBook: async (parent, {bookId}, context)=>{
             if(context.user){
