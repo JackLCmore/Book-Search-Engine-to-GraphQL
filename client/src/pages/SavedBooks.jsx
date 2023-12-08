@@ -19,7 +19,7 @@ const SavedBooks = () => {
   const userData = useQuery(GET_ME,{
     _id: Auth.getProfile().data._id
   });
-  console.log(useQuery(GET_ME));
+  console.log( Auth.getProfile().data._id);
 
   // use this to determine if `useEffect()` hook needs to run again
   // const userDataLength = Object.keys(userData).length;

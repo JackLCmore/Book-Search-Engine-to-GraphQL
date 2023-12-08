@@ -5,7 +5,7 @@ const resolvers = {
     Query:{
         me: async (parent, args, context) => {
             if (context.user) {
-                return User.findOne({_id: context.data._id});
+                return User.findOne({_id: context.user._id});
             }
             throw AuthenticationError;
         },
@@ -18,9 +18,9 @@ const resolvers = {
 
             return {token, user};
         },
-        login: async (parent, {email, password})=>{
+        loginUser: async (parent, {email, password})=>{
             const user = await User.findOne({email});
-
+            console.log("user", user);
             if (!user) {
                 throw AuthenticationError;
             }
@@ -32,13 +32,16 @@ const resolvers = {
             }
 
             const token = signToken(user);
+            console.log("this is token before return:", token)
             return {token, user};
         },
-        saveBook: async (parent, {authors,description, title, bookId, image, link}, context)=>{
+        saveBook: async (parent, args, context)=>{
+            console.log(args);
+            console.log("this is context", context.user)
             if(context.user){
                 return User.findOneAndUpdate(
                     { _id: context.user._id },
-                    { $addtoset: {authors:authors, description:description, title:title, bookId:bookId, image:image, link:link } },
+                    { $addToSet: { savedBooks:{...args}}},
                     { new: true }
                 )
             }
